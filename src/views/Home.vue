@@ -1,8 +1,27 @@
 <template>
   <div class="home">
     <h4>jobs</h4>
-    <div>
-      <p v-for="job in jobs" v-bind:key="job.id">{{ job }}</p>
+    <div class="container mt-4">
+      <table class="table table-bordered">
+        <thead>
+          <tr>
+            <th scope="col">Company ID</th>
+            <th scope="col">Role</th>
+            <th scope="col">Remote</th>
+            <th scope="col">Technologies</th>
+            <th scope="col">Save Job?</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr v-for="job in jobs" v-bind:key="job.id">
+            <td>{{ job.company_id }}</td>
+            <td>{{ job.role }}</td>
+            <td>{{ job.remote }}</td>
+            <td>{{ job.technologies }}</td>
+            <td><button type="button" v-on:click="saveJob()">save job</button></td>
+          </tr>
+        </tbody>
+      </table>
     </div>
   </div>
 </template>
@@ -35,6 +54,9 @@ export default {
         console.log("jobs", response);
         this.jobs = response.data;
       });
+    },
+    saveJob: function () {
+      console.log("button clicked");
     },
     beforeMount() {
       this.indexJobs();
