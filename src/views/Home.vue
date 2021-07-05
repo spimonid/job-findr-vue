@@ -18,7 +18,7 @@
             <td>{{ job.role }}</td>
             <td>{{ job.remote }}</td>
             <td>{{ job.technologies }}</td>
-            <td><button type="button" v-on:click="saveJob(job)">save job</button></td>
+            <td><button type="button" v-if="isLoggedIn()" v-on:click="saveJob(job)">save job</button></td>
           </tr>
         </tbody>
       </table>
@@ -69,6 +69,9 @@ export default {
           console.log(this.errors);
         });
       console.log(job);
+    },
+    isLoggedIn: function () {
+      return localStorage.getItem("jwt");
     },
     beforeMount() {
       this.indexJobs();
