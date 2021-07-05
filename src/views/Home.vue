@@ -18,7 +18,7 @@
             <td>{{ job.role }}</td>
             <td>{{ job.remote }}</td>
             <td>{{ job.technologies }}</td>
-            <td><button type="button" v-on:click="saveJob()">save job</button></td>
+            <td><button type="button" v-on:click="saveJob(job)">save job</button></td>
           </tr>
         </tbody>
       </table>
@@ -55,8 +55,20 @@ export default {
         this.jobs = response.data;
       });
     },
-    saveJob: function () {
-      console.log("button clicked");
+    saveJob: function (job) {
+      var params = {
+        job_id: job.id,
+      };
+      axios
+        .post("/saved_jobs/", params)
+        .then((response) => {
+          console.log(response.data);
+        })
+        .catch((error) => {
+          this.errors = error.response.data.errors;
+          console.log(this.errors);
+        });
+      console.log(job);
     },
     beforeMount() {
       this.indexJobs();
@@ -67,7 +79,7 @@ export default {
 </script>
 
 <style scoped>
-h1 {
+h4 {
   padding: 1em;
 }
 </style>
