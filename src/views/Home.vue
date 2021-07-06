@@ -5,7 +5,7 @@
       <table class="table table-bordered">
         <thead>
           <tr>
-            <th scope="col">Company ID</th>
+            <th scope="col">Company</th>
             <th scope="col">Role</th>
             <th scope="col">Remote</th>
             <th scope="col">Technologies</th>
@@ -14,7 +14,7 @@
         </thead>
         <tbody>
           <tr v-for="job in jobs" v-bind:key="job.id">
-            <td>{{ job.company_id }}</td>
+            <td>{{ job.company.name }}</td>
             <td>{{ job.role }}</td>
             <td>{{ job.remote }}</td>
             <td>{{ job.technologies }}</td>
@@ -35,18 +35,19 @@ export default {
   data: function () {
     return {
       jobs: [],
+      wwr_jobs: [],
     };
   },
   created: function () {
     this.indexJobs();
-    // this.indexWWR();
+    this.indexWWR();
   },
   components: {},
   methods: {
     indexWWR: function () {
       axios.get("/wwr").then((response) => {
         console.log("wwr", response);
-        this.jobs.push(response.data[16]);
+        this.wwr_jobs = response.data;
       });
     },
     indexJobs: function () {
@@ -73,9 +74,13 @@ export default {
     isLoggedIn: function () {
       return localStorage.getItem("jwt");
     },
+    currentPage: function () {
+      console.log(window.location.hostname);
+    },
     beforeMount() {
       this.indexJobs();
-      // this.indexWWR();
+      this.indexWWR();
+      this.currentPage();
     },
   },
 };

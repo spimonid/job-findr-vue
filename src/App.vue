@@ -7,10 +7,10 @@
           <li class="nav-item" v-if="!isLoggedIn()">
             <router-link class="nav-link" to="/login">Login</router-link>
           </li>
-          <li class="nav-item" v-if="isLoggedIn()">
+          <li class="nav-item" v-if="isLoggedIn() && !onSaved()">
             <router-link class="nav-link" to="/saved_jobs">Saved Jobs</router-link>
           </li>
-          <li class="nav-item" v-if="isLoggedIn()">
+          <li class="nav-item" v-if="isLoggedIn() && onSaved()">
             <router-link class="nav-link" to="/">Back To Job Feed</router-link>
           </li>
           <li class="nav-item" v-if="isLoggedIn()">
@@ -49,9 +49,15 @@ export default {
       // flashMessage: null,
     };
   },
+  created: function () {
+    this.onSaved();
+  },
   methods: {
     isLoggedIn: function () {
       return localStorage.getItem("jwt");
+    },
+    onSaved: function () {
+      return window.location.href === "http://localhost:8080/saved_jobs";
     },
   },
   components: {},
