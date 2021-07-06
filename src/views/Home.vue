@@ -17,7 +17,7 @@
             <td>{{ job.company.name }}</td>
             <td>{{ job.role }}</td>
             <td>{{ job.remote }}</td>
-            <td>{{ job.technologies }}</td>
+            <td>{{ job.technologies.split(" ")[0] }}</td>
             <td><button type="button" v-if="isLoggedIn()" v-on:click="saveJob(job)">save job</button></td>
           </tr>
         </tbody>
