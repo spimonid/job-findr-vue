@@ -2,7 +2,7 @@
   <div class="home">
     <h4>jobs</h4>
     <div class="container mt-4">
-      <table class="table table-bordered">
+      <table class="highlight">
         <thead>
           <tr>
             <th scope="col">Company</th>
@@ -18,7 +18,12 @@
             <td>{{ job.role }}</td>
             <td>{{ job.remote }}</td>
             <td>{{ job.technologies.split(" ")[0] }}</td>
-            <td><button type="button" v-if="isLoggedIn()" v-on:click="saveJob(job)">save job</button></td>
+            <td>
+              <div v-if="isLoggedIn()">
+                <button type="button" v-if="!isSaved(job)" v-on:click="saveJob(job)">save job</button>
+                <span v-else>saved!</span>
+              </div>
+            </td>
           </tr>
         </tbody>
       </table>
@@ -36,20 +41,15 @@ export default {
     return {
       jobs: [],
       wwr_jobs: [],
+      savedJobsIds: [],
     };
   },
   created: function () {
     this.indexJobs();
-    this.indexWWR();
+    this.indexSavedJobs();
   },
   components: {},
   methods: {
-    indexWWR: function () {
-      axios.get("/wwr").then((response) => {
-        console.log("wwr", response);
-        this.wwr_jobs = response.data;
-      });
-    },
     indexJobs: function () {
       axios.get("/jobs").then((response) => {
         console.log("jobs", response);
@@ -64,6 +64,7 @@ export default {
         .post("/saved_jobs/", params)
         .then((response) => {
           console.log(response.data);
+          this.savedJobsIds.push(job.id);
         })
         .catch((error) => {
           this.errors = error.response.data.errors;
@@ -71,16 +72,28 @@ export default {
         });
       console.log(job);
     },
+    indexSavedJobs: function () {
+      axios.get("/saved_jobs").then((response) => {
+        console.log("saved_jobs", response);
+        this.savedJobsIds = response.data.map((savedJob) => {
+          return savedJob.job.id;
+        });
+        console.log(this.savedJobsIds);
+      });
+    },
     isLoggedIn: function () {
       return localStorage.getItem("jwt");
     },
     currentPage: function () {
       console.log(window.location.hostname);
     },
+    isSaved: function (job) {
+      return this.savedJobsIds.includes(job.id);
+    },
     beforeMount() {
       this.indexJobs();
-      this.indexWWR();
       this.currentPage();
+      this.indexSavedJobs();
     },
   },
 };
