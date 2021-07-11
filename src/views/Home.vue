@@ -1,6 +1,5 @@
 <template>
   <div class="home">
-    <h4>jobs</h4>
     <div class="container mt-4">
       <table class="highlight">
         <thead>
@@ -10,6 +9,7 @@
             <th scope="col">Remote</th>
             <th scope="col">Technologies</th>
             <th scope="col">Save Job?</th>
+            <th scope="col">Skill Score</th>
           </tr>
         </thead>
         <tbody>
@@ -17,13 +17,15 @@
             <td>{{ job.company.name }}</td>
             <td>{{ job.role }}</td>
             <td>{{ job.remote }}</td>
-            <td>{{ job.technologies.split(" ")[0] }}</td>
+            <td>{{ job.technologies }}</td>
+
             <td>
               <div v-if="isLoggedIn()">
                 <button type="button" v-if="!isSaved(job)" v-on:click="saveJob(job)">save job</button>
                 <span v-else>saved!</span>
               </div>
             </td>
+            <td v-if="isLoggedIn()">{{ job.technologies.split(" | ").length }}</td>
           </tr>
         </tbody>
       </table>
@@ -42,6 +44,7 @@ export default {
       jobs: [],
       wwr_jobs: [],
       savedJobsIds: [],
+      techs: [],
     };
   },
   created: function () {
@@ -83,9 +86,6 @@ export default {
     },
     isLoggedIn: function () {
       return localStorage.getItem("jwt");
-    },
-    currentPage: function () {
-      console.log(window.location.hostname);
     },
     isSaved: function (job) {
       return this.savedJobsIds.includes(job.id);

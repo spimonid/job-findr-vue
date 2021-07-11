@@ -1,5 +1,11 @@
 <template>
   <div id="app">
+    <ul id="dropdown1" class="dropdown-content">
+      <li><a href="#!">one</a></li>
+      <li><a href="#!">two</a></li>
+      <li class="divider"></li>
+      <li><a href="#!">three</a></li>
+    </ul>
     <nav>
       <div class="nav-wrapper #0d47a1 blue darken-4">
         <a href="#" class="brand-logo">JobFindr</a>
@@ -13,29 +19,18 @@
           <li class="nav-item" v-if="isLoggedIn() && onSaved()">
             <router-link class="nav-link" to="/">Back To Job Feed</router-link>
           </li>
+          <li>
+            <a class="dropdown-trigger" v-if="isLoggedIn()" data-target="dropdown1">
+              Your Skills
+              <i class="material-icons right">arrow_drop_down</i>
+            </a>
+          </li>
           <li class="nav-item" v-if="isLoggedIn()">
             <router-link class="nav-link" to="/logout">Logout</router-link>
           </li>
           <li class="nav-item" v-if="!isLoggedIn()">
             <router-link class="nav-link" to="/signup">Signup</router-link>
           </li>
-          <!-- <a class="dropdown-trigger btn" href="/" data-target="dropdown1">Drop Me!</a>
-          <ul id="dropdown1" class="dropdown-content">
-            <li><a href="#!">one</a></li>
-            <li><a href="#!">two</a></li>
-            <li class="divider" tabindex="-1"></li>
-            <li><a href="/">three</a></li>
-            <li>
-              <a href="#!">
-                <i class="material-icons">view_module</i>
-                four
-              </a>
-            </li>
-            <li>
-              <a href="#!">
-                <i class="material-icons">cloud</i>
-                five -->
-          <!-- </a> -->
         </ul>
       </div>
     </nav>
@@ -43,7 +38,13 @@
   </div>
 </template>
 <script>
+// import $ from "jquery";
 export default {
+  // mounted: function () {
+  //   $(document).ready(function () {
+  //     console.log("HHHHHH", $(".dropdown-trigger").dropdown());
+  //   });
+  // },
   data: function () {
     return {
       // flashMessage: null,
@@ -65,6 +66,6 @@ export default {
 </script>
 <style>
 brand-logo {
-  padding: 200px;
+  padding: 2000px;
 }
 </style>

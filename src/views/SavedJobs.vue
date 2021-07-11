@@ -5,23 +5,17 @@
       <table class="table table-bordered">
         <thead>
           <tr>
-            <th scope="col">Company ID</th>
             <th scope="col">Company</th>
             <th scope="col">Role</th>
-            <!-- <th scope="col">Remote</th>
-            <th scope="col">Technologies</th> -->
+            <th scope="col">Technologies</th>
+            <th scope="col">Generate Cover Letter?</th>
           </tr>
         </thead>
         <tbody>
           <tr v-for="job in jobs" v-bind:key="job.id">
-            <td>{{ job.job.company.id }}</td>
             <td>{{ job.job.company.name }}</td>
             <td>{{ job.job.role }}</td>
-            <!-- <td>{{ job.company_id }}</td>
-            <td>{{ job.role }}</td>
-            <td>{{ job.remote }}</td>
-            <td>{{ job.technologies }}</td> -->
-            <!-- <td><button type="button" v-on:click="saveJob(job)">save job</button></td> -->
+            <td>{{ job.job.technologies }}</td>
           </tr>
         </tbody>
       </table>
