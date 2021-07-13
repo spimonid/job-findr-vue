@@ -38,8 +38,6 @@
             <td>{{ job.remote }}</td>
             <td>{{ job.technologies }}</td>
 
-            <!-- <td>{{ job.full_description.split(" ")}}</td> -->
-
             <td>
               <div v-if="isLoggedIn()">
                 <button type="button" v-if="!isSaved(job)" v-on:click="saveJob(job)">save job</button>
@@ -63,7 +61,6 @@
 
 <script>
 import axios from "axios";
-// @ is an alias to /src
 
 export default {
   name: "Home",
@@ -133,8 +130,12 @@ export default {
       this.techs[fu] = !this.techs[fu];
     },
     filterJobs: function () {
-      var filteredJobs = this.jobs.filter((job) => {
-        return job.technologies.includes(this.getCheckedTechs);
+      const isInJobTechs = (job, currentValue) => job.technologies.includes(currentValue);
+
+      const filteredJobs = this.jobs.filter((job) => {
+        return this.getCheckedTechs.every((tech) => {
+          return isInJobTechs(job, tech);
+        });
       });
       return filteredJobs;
     },
