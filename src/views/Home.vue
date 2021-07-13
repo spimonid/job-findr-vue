@@ -3,21 +3,43 @@
     <div class="container mt-4">
       <table class="highlight">
         <thead>
+          <div class="container">
+            <h6>Filter by techs:</h6>
+            <label>
+              <input type="checkbox" v-on:click="scanTechs('Ruby')" />
+              <span>Ruby</span>
+            </label>
+            <label>
+              <input type="checkbox" v-on:click="scanTechs('Javascript')" />
+              <span>Javascript</span>
+            </label>
+            <label>
+              <input type="checkbox" v-on:click="scanTechs('Python')" />
+              <span>Python</span>
+            </label>
+            <label>
+              <input type="checkbox" v-on:click="scanTechs('Git')" />
+              <span>Git</span>
+            </label>
+          </div>
+
           <tr>
             <th scope="col">Company</th>
             <th scope="col">Role</th>
             <th scope="col">Remote</th>
             <th scope="col">Technologies</th>
             <th scope="col">Save Job?</th>
-            <th scope="col">Skill Score</th>
+            <!-- <th scope="col">Skill Score</th> -->
           </tr>
         </thead>
-        <tbody>
-          <tr v-for="job in jobs" v-bind:key="job.id">
+        <tbody v-if="!getCheckedTechs.length">
+          <tr v-for="job in this.jobs" v-bind:key="job.id">
             <td>{{ job.company.name }}</td>
             <td>{{ job.role }}</td>
             <td>{{ job.remote }}</td>
             <td>{{ job.technologies }}</td>
+
+            <!-- <td>{{ job.full_description.split(" ")}}</td> -->
 
             <td>
               <div v-if="isLoggedIn()">
@@ -25,7 +47,15 @@
                 <span v-else>saved!</span>
               </div>
             </td>
-            <td v-if="isLoggedIn()">{{ job.technologies.split(" | ").length }}</td>
+            <!-- <td v-if="isLoggedIn()">{{ job.technologies.includes("Ruby") }}</td> -->
+          </tr>
+        </tbody>
+        <tbody v-else>
+          <tr v-for="job in filterJobs" v-bind:key="job.id">
+            <td>{{ job.company.name }}</td>
+            <td>{{ job.role }}</td>
+            <td>{{ job.remote }}</td>
+            <td>{{ job.technologies }}</td>
           </tr>
         </tbody>
       </table>
@@ -42,9 +72,9 @@ export default {
   data: function () {
     return {
       jobs: [],
-      wwr_jobs: [],
       savedJobsIds: [],
-      techs: [],
+      checkedNames: [],
+      techs: { Ruby: false, Python: false, React: false, Git: false },
     };
   },
   created: function () {
@@ -52,6 +82,19 @@ export default {
     this.indexSavedJobs();
   },
   components: {},
+  computed: {
+    getCheckedTechs() {
+      var checkedTechs = [];
+      for (const [tech, checked] of Object.entries(this.techs)) {
+        if (checked === true) {
+          checkedTechs.push(tech);
+        }
+      }
+      console.log("checked Techs: ", checkedTechs);
+
+      return checkedTechs;
+    },
+  },
   methods: {
     indexJobs: function () {
       axios.get("/jobs").then((response) => {
@@ -95,12 +138,14 @@ export default {
       this.currentPage();
       this.indexSavedJobs();
     },
+    scanTechs: function (fu) {
+      this.techs[fu] = !this.techs[fu];
+      console.log(this.techs);
+    },
+    filterJobs: function () {
+      console.log("JOB 1 - ", this.jobs[0]);
+      return [this.jobs[0]];
+    },
   },
 };
 </script>
-
-<style scoped>
-h4 {
-  padding: 1em;
-}
-</style>

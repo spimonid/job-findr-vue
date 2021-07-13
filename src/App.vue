@@ -65,7 +65,7 @@ export default {
 };
 </script>
 <style>
-brand-logo {
+#brand-logo {
   padding: 2000px;
 }
 </style>
