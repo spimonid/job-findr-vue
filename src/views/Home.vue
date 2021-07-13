@@ -29,7 +29,6 @@
             <th scope="col">Remote</th>
             <th scope="col">Technologies</th>
             <th scope="col">Save Job?</th>
-            <!-- <th scope="col">Skill Score</th> -->
           </tr>
         </thead>
         <tbody v-if="!getCheckedTechs.length">
@@ -47,11 +46,10 @@
                 <span v-else>saved!</span>
               </div>
             </td>
-            <!-- <td v-if="isLoggedIn()">{{ job.technologies.includes("Ruby") }}</td> -->
           </tr>
         </tbody>
         <tbody v-else>
-          <tr v-for="job in filterJobs" v-bind:key="job.id">
+          <tr v-for="job in this.filterJobs()" v-bind:key="job.id">
             <td>{{ job.company.name }}</td>
             <td>{{ job.role }}</td>
             <td>{{ job.remote }}</td>
@@ -73,7 +71,6 @@ export default {
     return {
       jobs: [],
       savedJobsIds: [],
-      checkedNames: [],
       techs: { Ruby: false, Python: false, React: false, Git: false },
     };
   },
@@ -98,7 +95,6 @@ export default {
   methods: {
     indexJobs: function () {
       axios.get("/jobs").then((response) => {
-        console.log("jobs", response);
         this.jobs = response.data;
       });
     },
@@ -116,15 +112,12 @@ export default {
           this.errors = error.response.data.errors;
           console.log(this.errors);
         });
-      console.log(job);
     },
     indexSavedJobs: function () {
       axios.get("/saved_jobs").then((response) => {
-        console.log("saved_jobs", response);
         this.savedJobsIds = response.data.map((savedJob) => {
           return savedJob.job.id;
         });
-        console.log(this.savedJobsIds);
       });
     },
     isLoggedIn: function () {
@@ -134,17 +127,16 @@ export default {
       return this.savedJobsIds.includes(job.id);
     },
     beforeMount() {
-      this.indexJobs();
       this.currentPage();
-      this.indexSavedJobs();
     },
     scanTechs: function (fu) {
       this.techs[fu] = !this.techs[fu];
-      console.log(this.techs);
     },
     filterJobs: function () {
-      console.log("JOB 1 - ", this.jobs[0]);
-      return [this.jobs[0]];
+      var filteredJobs = this.jobs.filter((job) => {
+        return job.technologies.includes(this.getCheckedTechs);
+      });
+      return filteredJobs;
     },
   },
 };
