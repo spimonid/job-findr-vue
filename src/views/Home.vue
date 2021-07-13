@@ -1,16 +1,8 @@
 <template>
-  <div class="home">
-    <div class="container mt-4">
-      <table class="highlight">
+  <div class="home container">
+    <div class="row">
+      <table class="col s10 highlight">
         <thead>
-          <div class="col s2">
-            <h6>Filter by techs:</h6>
-            <label v-for="tech in Object.keys(techs)" v-bind:key="tech">
-              <input type="checkbox" v-on:click="scanTechs(tech)" />
-              <span>{{ tech }}</span>
-            </label>
-          </div>
-
           <tr>
             <th scope="col">Company</th>
             <th scope="col">Role</th>
@@ -43,6 +35,15 @@
           </tr>
         </tbody>
       </table>
+      <div class="filters col s2 m2">
+        <h6>Filter by techs:</h6>
+        <p v-for="tech in Object.keys(techs)" v-bind:key="tech">
+          <label>
+            <input type="checkbox" v-on:click="scanTechs(tech)" />
+            <span>{{ tech }}</span>
+          </label>
+        </p>
+      </div>
     </div>
   </div>
 </template>
@@ -141,3 +142,8 @@ export default {
   },
 };
 </script>
+<style scoped>
+.filters {
+  padding-left: 80px;
+}
+</style>

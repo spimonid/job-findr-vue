@@ -8,7 +8,7 @@
     </ul>
     <nav>
       <div class="nav-wrapper #0d47a1 blue darken-4">
-        <a href="#" class="brand-logo">JobFindr</a>
+        <a href="/" class="brand-logo"><span class="space-left">JobFindr</span></a>
         <ul id="nav-mobile" class="right hide-on-med-and-down">
           <li class="nav-item" v-if="!isLoggedIn()">
             <router-link class="nav-link" to="/login">Login</router-link>
@@ -60,7 +60,7 @@ export default {
 };
 </script>
 <style>
-#brand-logo {
-  padding: 2000px;
+.space-left {
+  padding-left: 20px;
 }
 </style>
