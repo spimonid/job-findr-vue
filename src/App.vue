@@ -19,12 +19,7 @@
           <li class="nav-item" v-if="isLoggedIn() && onSaved()">
             <router-link class="nav-link" to="/">Back To Job Feed</router-link>
           </li>
-          <li>
-            <a class="dropdown-trigger" v-if="isLoggedIn()" data-target="dropdown1">
-              Your Skills
-              <i class="material-icons right">arrow_drop_down</i>
-            </a>
-          </li>
+
           <li class="nav-item" v-if="isLoggedIn()">
             <router-link class="nav-link" to="/logout">Logout</router-link>
           </li>

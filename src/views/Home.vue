@@ -3,23 +3,11 @@
     <div class="container mt-4">
       <table class="highlight">
         <thead>
-          <div class="container">
+          <div class="col s2">
             <h6>Filter by techs:</h6>
-            <label>
-              <input type="checkbox" v-on:click="scanTechs('Ruby')" />
-              <span>Ruby</span>
-            </label>
-            <label>
-              <input type="checkbox" v-on:click="scanTechs('Javascript')" />
-              <span>Javascript</span>
-            </label>
-            <label>
-              <input type="checkbox" v-on:click="scanTechs('Python')" />
-              <span>Python</span>
-            </label>
-            <label>
-              <input type="checkbox" v-on:click="scanTechs('Git')" />
-              <span>Git</span>
+            <label v-for="tech in Object.keys(techs)" v-bind:key="tech">
+              <input type="checkbox" v-on:click="scanTechs(tech)" />
+              <span>{{ tech }}</span>
             </label>
           </div>
 
@@ -68,7 +56,7 @@ export default {
     return {
       jobs: [],
       savedJobsIds: [],
-      techs: { Ruby: false, Python: false, React: false, Git: false },
+      techs: {},
     };
   },
   created: function () {
@@ -93,7 +81,18 @@ export default {
     indexJobs: function () {
       axios.get("/jobs").then((response) => {
         this.jobs = response.data;
+        this.setTechs(response.data);
       });
+    },
+    setTechs: function (jobs) {
+      const techsArraySet = new Set(jobs.map((element) => element.technologies.split(" | ")).flat());
+      const techsArray = Array.from(techsArraySet);
+      this.techs = techsArray.reduce(function (techsDict, tech) {
+        if (tech) {
+          techsDict[tech] = false;
+        }
+        return techsDict;
+      }, {});
     },
     saveJob: function (job) {
       var params = {
