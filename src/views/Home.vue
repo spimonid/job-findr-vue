@@ -4,6 +4,7 @@
       <table class="col s10 highlight">
         <thead>
           <tr>
+            <th scope="col"></th>
             <th scope="col">Company</th>
             <th scope="col">Role</th>
             <th scope="col">Remote</th>
@@ -13,8 +14,11 @@
         </thead>
         <tbody v-if="!getCheckedTechs.length">
           <tr v-for="job in this.jobs" v-bind:key="job.id">
+            <td><img :src="job.logo" /></td>
             <td>{{ job.company.name }}</td>
-            <td>{{ job.role }}</td>
+            <td>
+              <a :href="job.link">{{ job.role }}</a>
+            </td>
             <td>{{ job.remote }}</td>
             <td>{{ job.technologies }}</td>
 
@@ -29,13 +33,22 @@
         <tbody v-else>
           <tr v-for="job in this.filterJobs()" v-bind:key="job.id">
             <td>{{ job.company.name }}</td>
-            <td>{{ job.role }}</td>
+            <td>
+              <a :href="job.link">{{ job.role }}</a>
+            </td>
             <td>{{ job.remote }}</td>
             <td>{{ job.technologies }}</td>
+
+            <td>
+              <div v-if="isLoggedIn()">
+                <button type="button" v-if="!isSaved(job)" v-on:click="saveJob(job)">save job</button>
+                <span v-else>saved!</span>
+              </div>
+            </td>
           </tr>
         </tbody>
       </table>
-      <div class="filters col s2 m2">
+      <div v-if="isLoggedIn()" class="filters col s2 m2">
         <h6>Filter by techs:</h6>
         <p v-for="tech in Object.keys(techs)" v-bind:key="tech">
           <label>
@@ -50,9 +63,11 @@
 
 <script>
 import axios from "axios";
+import { VTooltip } from "v-tooltip";
 
 export default {
   name: "Home",
+  directives: { tooltip: VTooltip },
   data: function () {
     return {
       jobs: [],
@@ -139,11 +154,15 @@ export default {
       });
       return filteredJobs;
     },
+    displayFullJobDescription: function (job) {
+      return job.full_description;
+    },
   },
 };
 </script>
 <style scoped>
 .filters {
   padding-left: 80px;
+  padding-top: 20px;
 }
 </style>
